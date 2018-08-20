@@ -14,7 +14,8 @@ def readme(file_name):
 setup(
     name="nb_black",
     version="1.0.0",
-    description="A simple extension to beautify code automatically for Jupyter Notebook and Jupyter Lab.",
+    description="A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using "
+                "black.",
     long_description=readme(file_name="README.md"),
     keywords="black-formatter black-beautifier black jupyterlab-extension jupyter-notebook-extension",
     url="https://github.com/dnanhkhoa/nb_black",
