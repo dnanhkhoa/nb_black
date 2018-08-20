@@ -12,9 +12,9 @@ class BlackFormatter(object):
     def format(self, result):
         cell = result.info.raw_cell
         try:
-            cell = re.sub(r"^\s*([!%?])", "# :@BF@: \g<1>", cell)
+            cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
             cell = format_str(src_contents=cell, line_length=88)
-            cell = re.sub(r"^#\s*:@BF@:\s*([!%?])", "\g<1>", cell)
+            cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
             self.shell.set_next_input(cell.rstrip(), replace=True)
         except ValueError:
             pass
