@@ -31,7 +31,7 @@ class BlackFormatter(object):
     def __init__(self, ip):
         self.shell = ip
 
-    if LooseVersion(IPython.__version__) < LooseVersion("6.0"):
+    if LooseVersion(IPython.__version__) < LooseVersion("6.5"):
 
         def format(self):
             try:
