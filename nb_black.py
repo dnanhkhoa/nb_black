@@ -55,7 +55,7 @@ class BlackFormatter(object):
                 cell = _format_code(cell)
                 cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
                 # noinspection PyTypeChecker
-                display(Javascript(self.js_code % (inp_id, json.dumps(cell))))
+                display(Javascript(self.js_code % (inp_id, json.dumps(cell.rstrip()))))
         except (ValueError, TypeError):
             pass
 
