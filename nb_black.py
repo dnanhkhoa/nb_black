@@ -21,7 +21,7 @@ else:
 
 
     def _format_code(code):
-        return FormatCode(code, style_config="facebook")
+        return FormatCode(code, style_config="facebook")[0]
 
 
 class BlackFormatter(object):
@@ -35,7 +35,7 @@ class BlackFormatter(object):
             cell = _format_code(cell)
             cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
             self.shell.set_next_input(cell.rstrip(), replace=True)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
 
