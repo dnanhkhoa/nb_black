@@ -13,7 +13,7 @@ def readme(file_name):
 
 setup(
     name="nb_black",
-    version="1.0.1",
+    version="1.0.2",
     description="A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using "
                 "Black.",
     long_description=readme(file_name="README.md"),
@@ -22,7 +22,7 @@ setup(
     author="Khoa Duong",
     author_email="dnanhkhoa@live.com",
     license="MIT",
-    py_modules=["nb_black"],
+    py_modules=["nb_black", "lab_black"],
     zip_safe=False,
     install_requires=[
         "yapf; python_version < '3.6'",
