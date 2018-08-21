@@ -7,6 +7,9 @@ from __future__ import unicode_literals
 
 import re
 import sys
+from distutils.version import LooseVersion
+
+import IPython
 
 if sys.version_info >= (3, 6, 0):
     from black import format_str
@@ -28,15 +31,31 @@ class BlackFormatter(object):
     def __init__(self, ip):
         self.shell = ip
 
-    def format(self):
-        try:
-            cell = self.shell.user_ns["In"][-1]
-            cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
-            cell = _format_code(cell)
-            cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
-            self.shell.set_next_input(cell.rstrip(), replace=True)
-        except (ValueError, TypeError):
-            pass
+    if LooseVersion(IPython.__version__) < LooseVersion("6.0"):
+
+        def format(self):
+            try:
+                inp_id = len(self.shell.user_ns["In"]) - 1
+                if inp_id > 0:
+                    cell = self.shell.user_ns["_i%d" % inp_id]
+                    cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
+                    cell = _format_code(cell)
+                    cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
+                    self.shell.set_next_input(cell.rstrip(), replace=True)
+            except (ValueError, TypeError):
+                pass
+
+    else:
+
+        def format(self, result):
+            try:
+                cell = result.info.raw_cell
+                cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
+                cell = _format_code(cell)
+                cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
+                self.shell.set_next_input(cell.rstrip(), replace=True)
+            except (ValueError, TypeError):
+                pass
 
 
 black_formatter = None
