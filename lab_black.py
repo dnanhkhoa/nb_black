@@ -14,14 +14,12 @@ import IPython
 if sys.version_info >= (3, 6, 0):
     from black import format_str
 
-
     def _format_code(code):
         return format_str(src_contents=code, line_length=80)
 
 
 else:
     from yapf.yapflib.yapf_api import FormatCode
-
 
     def _format_code(code):
         return FormatCode(code, style_config="facebook")[0]
@@ -38,6 +36,11 @@ class BlackFormatter(object):
                 inp_id = len(self.shell.user_ns["In"]) - 1
                 if inp_id > 0:
                     cell = self.shell.user_ns["_i%d" % inp_id]
+
+                    # Skip if exists magic command `load`
+                    if re.search(r"^[ \t]*%load +", cell, flags=re.M):
+                        return
+
                     cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
                     cell = _format_code(cell)
                     cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
@@ -50,6 +53,11 @@ class BlackFormatter(object):
         def format(self, result):
             try:
                 cell = result.info.raw_cell
+
+                # Skip if exists magic command `load`
+                if re.search(r"^[ \t]*%load +", cell, flags=re.M):
+                    return
+
                 cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
                 cell = _format_code(cell)
                 cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
