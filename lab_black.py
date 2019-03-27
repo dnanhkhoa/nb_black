@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
 import re
 import sys
 from distutils.version import LooseVersion
@@ -12,14 +13,16 @@ from distutils.version import LooseVersion
 import IPython
 
 if sys.version_info >= (3, 6, 0):
-    from black import format_str
+    from black import format_str, FileMode
+
 
     def _format_code(code):
-        return format_str(src_contents=code, line_length=80)
+        return format_str(src_contents=code, mode=FileMode())
 
 
 else:
     from yapf.yapflib.yapf_api import FormatCode
+
 
     def _format_code(code):
         return FormatCode(code, style_config="facebook")[0]
@@ -45,8 +48,8 @@ class BlackFormatter(object):
                     cell = _format_code(cell)
                     cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
                     self.shell.set_next_input(cell.rstrip(), replace=True)
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as e:
+                logging.exception(e)
 
     else:
 
@@ -62,8 +65,8 @@ class BlackFormatter(object):
                 cell = _format_code(cell)
                 cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
                 self.shell.set_next_input(cell.rstrip(), replace=True)
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as e:
+                logging.exception(e)
 
 
 black_formatter = None

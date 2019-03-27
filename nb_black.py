@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import json
+import logging
 import re
 import sys
 from distutils.version import LooseVersion
@@ -14,11 +15,11 @@ import IPython
 from IPython.display import display, Javascript
 
 if sys.version_info >= (3, 6, 0):
-    from black import format_str
+    from black import format_str, FileMode
 
 
     def _format_code(code):
-        return format_str(src_contents=code, line_length=80)
+        return format_str(src_contents=code, mode=FileMode())
 
 
 else:
@@ -56,8 +57,8 @@ class BlackFormatter(object):
                 cell = re.sub(r"^\s*# :@BF@: (\s*[!%?])", "\g<1>", cell, flags=re.M)
                 # noinspection PyTypeChecker
                 display(Javascript(self.js_code % (inp_id, json.dumps(cell.rstrip()))))
-        except (ValueError, TypeError):
-            pass
+        except (ValueError, TypeError) as e:
+            logging.exception(e)
 
     if LooseVersion(IPython.__version__) < LooseVersion("6.5"):
 
