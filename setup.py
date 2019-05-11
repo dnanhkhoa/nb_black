@@ -13,7 +13,7 @@ def readme(file_name):
 
 setup(
     name="nb_black",
-    version="1.0.4",
+    version="1.0.5",
     description="A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using "
                 "Black.",
     long_description=readme(file_name="README.md"),

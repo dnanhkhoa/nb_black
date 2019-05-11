@@ -41,7 +41,8 @@ class BlackFormatter(object):
                     cell = self.shell.user_ns["_i%d" % inp_id]
 
                     # Skip if exists magic command `load`
-                    if re.search(r"^[ \t]*%load +", cell, flags=re.M):
+                    if re.search(r"^[ \t]*%load +", cell, flags=re.M) or \
+                            re.search(r"(?<! )(\?)$", cell, flags=re.M):
                         return
 
                     cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
@@ -58,7 +59,8 @@ class BlackFormatter(object):
                 cell = result.info.raw_cell
 
                 # Skip if exists magic command `load`
-                if re.search(r"^[ \t]*%load +", cell, flags=re.M):
+                if re.search(r"^[ \t]*%load +", cell, flags=re.M) or \
+                        re.search(r"(?<! )(\?)$", cell, flags=re.M):
                     return
 
                 cell = re.sub(r"^(\s*[!%?])", "# :@BF@: \g<1>", cell, flags=re.M)
