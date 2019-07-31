@@ -180,8 +180,8 @@ class BlackFormatter(object):
         else:
             js_code = """
             setTimeout(function() {
-                var nbb_cell_id = {};
-                var nbb_formatted_code = {};
+                var nbb_cell_id = %d;
+                var nbb_formatted_code = %s;
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
@@ -191,13 +191,16 @@ class BlackFormatter(object):
                 }
             }, 500);
             """
-            display(Javascript(js_code.format(cell_id, json.dumps(cell))))
+            display(Javascript(js_code % (cell_id, json.dumps(cell))))
 
     def format_cell(self, *args, **kwargs):
         try:
             cell_id = len(self.shell.user_ns["In"]) - 1
             if cell_id > 0:
                 cell = self.shell.user_ns["_i" + str(cell_id)]
+
+                if re.search(r"^\s*%load(py)? ", cell, flags=re.M):
+                    return
 
                 hidden_variables = []
 
