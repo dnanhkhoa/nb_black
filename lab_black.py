@@ -201,7 +201,7 @@ class BlackFormatter(object):
             )
             display(Javascript(js_code))
 
-    def format_cell(self, result):
+    def format_cell(self, *args, **kwargs):
         try:
             cell_id = len(self.shell.user_ns["In"]) - 1
             if cell_id > 0:
