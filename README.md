@@ -5,7 +5,10 @@
 
 A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using **Black**.
 
-Please note that since the **Black** package only supports Python 3.6+, so **YAPF** package will be used for the lower versions. And please **DO NOT EDIT** your code while running cell, otherwise your new code will be replaced by the formatted code.
+Please note that since the **Black** package only supports Python 3.6+, so **YAPF** package will
+be used for the lower versions. If you edit the code while running the cell, the formatting is
+not submitted to the Jupyter notebook and instead silently suppressed, so you have to stick with
+the edited, but unformatted code.
 
 ## Installation
 

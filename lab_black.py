@@ -174,38 +174,46 @@ class BlackFormatter(object):
         self.shell = ip
         self.is_lab = is_lab
 
-    def __set_cell(self, cell, cell_id=None):
+    def __set_cell(self, unformatted_cell, cell, cell_id=None):
         if self.is_lab:
             self.shell.set_next_input(cell, replace=True)
         else:
             js_code = """
             setTimeout(function() {
                 var nbb_cell_id = %d;
+                var nbb_unformatted_code = %s;
                 var nbb_formatted_code = %s;
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
-                        nbb_cells[i].set_text(nbb_formatted_code);
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
                         break;
                     }
                 }
             }, 500);
             """
-            display(Javascript(js_code % (cell_id, json.dumps(cell))))
+            js_code = js_code % (
+                cell_id,
+                json.dumps(unformatted_cell),
+                json.dumps(cell),
+            )
+            display(Javascript(js_code))
 
     def format_cell(self, *args, **kwargs):
         try:
             cell_id = len(self.shell.user_ns["In"]) - 1
             if cell_id > 0:
-                cell = self.shell.user_ns["_i" + str(cell_id)]
+                unformatted_cell = self.shell.user_ns["_i" + str(cell_id)]
 
-                if re.search(r"^\s*%load(py)? ", cell, flags=re.M):
+                if re.search(r"^\s*%load(py)? ", unformatted_cell, flags=re.M):
                     return
 
                 hidden_variables = []
 
                 # Transform magic commands into special variables
-                cell = _transform_magic_commands(cell, hidden_variables)
+                cell = _transform_magic_commands(unformatted_cell, hidden_variables)
 
                 formatted_code = _format_code(cell)
 
@@ -214,7 +222,7 @@ class BlackFormatter(object):
                     formatted_code, hidden_variables
                 )
 
-                self.__set_cell(formatted_code.strip(), cell_id)
+                self.__set_cell(unformatted_cell, formatted_code.strip(), cell_id)
         except (ValueError, TypeError, AssertionError) as err:
             logging.exception(err)
 
