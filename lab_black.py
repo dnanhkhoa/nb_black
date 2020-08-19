@@ -186,7 +186,7 @@ class BlackFormatter(object):
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
-                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                        if (nbb_cells[i].get_text().trim() == nbb_unformatted_code) {
                              nbb_cells[i].set_text(nbb_formatted_code);
                         }
                         break;
