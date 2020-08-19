@@ -16,6 +16,7 @@ setup(
     version="1.0.7",
     description="A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using Black.",
     long_description=readme(file_name="README.md"),
+    long_description_content_type="text/markdown",
     keywords="black-formatter black-beautifier black jupyterlab-extension jupyter-notebook-extension",
     url="https://github.com/dnanhkhoa/nb_black",
     author="Khoa Duong",
