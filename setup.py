@@ -24,8 +24,8 @@ setup(
     py_modules=["nb_black", "lab_black"],
     zip_safe=False,
     install_requires=[
-        "yapf >= '0.28'; python_version < '3.6'",
-        "black >= '19.3'; python_version >= '3.6'",
+        "yapf >= 0.28; python_version < '3.6'",
+        "black >= 19.3; python_version >= '3.6'",
         "ipython",
     ],
     classifiers=[
