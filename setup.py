@@ -14,9 +14,14 @@ def readme(file_name):
 setup(
     name="nb_black",
     version="1.0.7",
-    description="A simple extension for Jupyter Notebook and Jupyter Lab to beautify Python code automatically using Black.",
+    description="A simple extension for Jupyter Notebook and Jupyter Lab "
+                "to beautify Python code automatically using Black.",
     long_description=readme(file_name="README.md"),
-    keywords="black-formatter black-beautifier black jupyterlab-extension jupyter-notebook-extension",
+    keywords="black-formatter "
+             "black-beautifier "
+             "black "
+             "jupyterlab-extension "
+             "jupyter-notebook-extension",
     url="https://github.com/dnanhkhoa/nb_black",
     author="Khoa Duong",
     author_email="dnanhkhoa@live.com",

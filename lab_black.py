@@ -65,7 +65,7 @@ def _transform_magic_commands(cell, hidden_variables):
             hidden_variables.append(rhs)
             call = __BF_SIGNATURE__.format(len(hidden_variables) - 1)
             new_line = lhs + call + "\n"
-            lines_after = lines[end_line + 1 :]
+            lines_after = lines[end_line + 1:]
 
             return lines_before + [new_line] + lines_after
 
@@ -86,7 +86,7 @@ def _transform_magic_commands(cell, hidden_variables):
             hidden_variables.append(rhs)
             call = __BF_SIGNATURE__.format(len(hidden_variables) - 1)
             new_line = lhs + call + "\n"
-            lines_after = lines[end_line + 1 :]
+            lines_after = lines[end_line + 1:]
 
             return lines_before + [new_line] + lines_after
 
@@ -114,7 +114,7 @@ def _transform_magic_commands(cell, hidden_variables):
 
             lines_before = lines[:start_line]
             new_line = indent + call + "\n"
-            lines_after = lines[end_line + 1 :]
+            lines_after = lines[end_line + 1:]
 
             return lines_before + [new_line] + lines_after
 
@@ -123,10 +123,10 @@ def _transform_magic_commands(cell, hidden_variables):
             # https://github.com/ipython/ipython/blob/1879ed27bb0ec3be5fee499ac177ad14a9ef7cfd/IPython/core/inputtransformer2.py#L439
             """Transform a help command found by the ``find()`` classmethod.
             """
-            piece = "".join(lines[self.start_line : self.q_line + 1])
-            indent, content = piece[: self.start_col], piece[self.start_col :]
+            piece = "".join(lines[self.start_line: self.q_line + 1])
+            indent, content = piece[: self.start_col], piece[self.start_col:]
             lines_before = lines[: self.start_line]
-            lines_after = lines[self.q_line + 1 :]
+            lines_after = lines[self.q_line + 1:]
 
             m = _help_end_re.search(content)
             if not m:
@@ -179,15 +179,17 @@ class BlackFormatter(object):
             self.shell.set_next_input(cell, replace=True)
         else:
             js_code = """
-            setTimeout(function() {
+            setTimeout(function writeToCell () {
+
                 var nbb_cell_id = %d;
                 var nbb_unformatted_code = %s;
                 var nbb_formatted_code = %s;
                 var nbb_cells = Jupyter.notebook.get_cells();
+
                 for (var i = 0; i < nbb_cells.length; ++i) {
-                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
-                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
-                             nbb_cells[i].set_text(nbb_formatted_code);
+                    if (nbb_cells[i].input_prompt_number === nbb_cell_id) {
+                        if (nbb_cells[i].get_text() === nbb_unformatted_code) {
+                            nbb_cells[i].set_text(nbb_formatted_code);
                         }
                         break;
                     }
