@@ -11,3 +11,10 @@ def load_ipython_extension(ip):
     if black_formatter is None:
         black_formatter = BlackFormatter(ip, is_lab=False)
         ip.events.register("post_run_cell", black_formatter.format_cell)
+
+
+def unload_ipython_extension(ip):
+    global black_formatter
+    if black_formatter:
+        ip.events.unregister("post_run_cell", black_formatter.format_cell)
+        black_formatter = None
